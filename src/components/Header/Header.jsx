@@ -2,7 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import LogOutBtn from './LogOutBtn'
-import {Container, Logo} from '../index'
+import Container from '../Container'
+import Logo from '../Logo'
 
 const Header = () => {
   const authStatus = useSelector((state)=> state.auth.isLoggedIn)
