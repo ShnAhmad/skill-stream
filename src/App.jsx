@@ -1,36 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import config from './config/config'
+import { useEffect, useState } from "react";
+import "./App.css";
+import { useDispatch } from "react-redux";
+import authService from "./appwrite/auth";
+import { login, logout } from "./store/authSlice";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/AppRoutes";
 
 function App() {
-  const [count, setCount] = useState(0)
-  console.log(config.appWriteEndPoint)
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    authService.getCurrentUser().then((user) => {
+      if (user) {
+        dispatch(login({ user }));
+      } else {
+        dispatch(logout());
+      }
+    }).finally(()=>{
+      setLoading(false);
+    });
+  }, []);
+
+  return !loading ? <RouterProvider router={router} /> : <div>Loading...</div>;
 }
 
-export default App
+export default App;
