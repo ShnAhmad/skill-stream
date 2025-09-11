@@ -36,8 +36,7 @@ const Header = () => {
   },
   ]
   return (
-    <header className='py-3 shadow bg-gray-500'>
-      <Container>
+    <header className='w-full py-3 shadow bg-gray-500'>
         <nav className='flex'>
           <div className='mr-4'>
             <Link to='/'>
@@ -63,7 +62,6 @@ const Header = () => {
             )}
           </ul>
         </nav>
-        </Container>
     </header>
   )
 }
