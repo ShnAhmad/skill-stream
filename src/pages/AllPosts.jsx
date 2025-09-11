@@ -8,7 +8,7 @@ function AllPosts() {
     useEffect(() => {}, [])
     postService.getPosts([]).then((posts) => {
         if (posts) {
-            setPosts(posts.documents)
+            setPosts(posts.rows)
         }
     })
   return (
