@@ -11,9 +11,12 @@ function Home() {
   useEffect(() => {
     if (isLoggedIn) {
       postService.getPosts().then((posts) => {
-        if (posts) {
+        if (posts?.documents) {
           setPosts(posts.documents);
+        } else {
+          setPosts([]);
         }
+
       });
     }
   }, []);

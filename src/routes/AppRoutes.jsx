@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../Layout";
 import Home from "../pages/Home";
-import LoginPage from "../pages/Login";
+import Login from "../pages/Login";
 import SignupPage from "../pages/Signup";
 import AllPosts from "../pages/AllPosts";
 import AddPost from "../pages/AddPost";
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
             path: "/login",
             element: (
                 <AuthLayout authentication={false}>
-                    <LoginPage />
+                    <Login />
                 </AuthLayout>
             ),
         },
