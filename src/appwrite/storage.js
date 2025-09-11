@@ -35,8 +35,8 @@ export class StorageService {
     }
   }
 
-  getFilePreview(fileId) {
-    return this.storage.getFilePreview(config.appWriteBucketId, fileId);
+  getFileView(fileId) {
+    return this.storage.getFileView(config.appWriteBucketId, fileId);
   }
 }
 
