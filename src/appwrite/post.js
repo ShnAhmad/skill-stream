@@ -12,7 +12,7 @@ export class PostService {
     this.tablesDB = new TablesDB(this.client);
   }
 
-  async createPost({ title, slug, content, featuredImage, status, userId }) {
+  async createPost({ title, slug, content, featuredImage, status, userId, userName}) {
     try {
       return await this.tablesDB.createRow(
         config.appWriteDatabaseId,
@@ -24,6 +24,7 @@ export class PostService {
           featuredImage,
           status,
           userId,
+          userName
         }
       );
     } catch (error) {
