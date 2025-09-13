@@ -1,13 +1,19 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import LogOutBtn from "./LogOutBtn";
-import Container from "../Container";
 import Logo from "../Logo";
+import authService from "../../appwrite/auth";
+import { logout as authLogout } from "../../store/authSlice";
 
 const Header = () => {
   const authStatus = useSelector((state) => state.auth.isLoggedIn);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    authService.logout().then(() => {
+      dispatch(authLogout());
+    });
+  };
   const navItems = [
     {
       name: "Home",
@@ -50,7 +56,7 @@ const Header = () => {
                 <li key={item.name}>
                   <Link
                     to={item.slug}
-                    className=" px-6 py-2 transition-all ease-in-out duration-300 hover:text-[var(--color-primary-500)]"
+                    className=" px-6 py-2 transition-all ease-in-out duration-300 hover:text-[var(--color-primary-500)] font-secondary"
                   >
                     {item.name}
                   </Link>
@@ -59,7 +65,13 @@ const Header = () => {
             )}
             {authStatus && (
               <li>
-                <LogOutBtn />
+                <Link
+                  to="/login"
+                  onClick={logoutHandler}
+                  className="px-6 py-2 transition-all ease-in-out duration-300 hover:text-[var(--color-primary-500)] font-secondary bg-[var(--color-secondary-950)]"
+                >
+                  Logout
+                </Link>
               </li>
             )}
           </ul>
