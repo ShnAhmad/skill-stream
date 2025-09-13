@@ -7,10 +7,10 @@ const PostCard = ({$id, title, featuredImage}) => {
 
   return (
      <Link to={`/post/${$id}`}>
-        <div className='w-full bg-gray-100 rounded-xl p-4'>
-            <div className='w-full justify-center mb-4'>
+        <div className='w-full bg-[var(--color-secondary-900)] border border-[var(--color-secondary-950)] rounded-xl p-4 transition-transform hover:-translate-y-1 hover:shadow-2xl'>
+            <div className='w-full h-58 justify-center mb-4'>
                 <img src={imageUrl} alt={title}
-                className='rounded-xl' />
+                className='w-full h-full rounded-xl object-cover' />
 
             </div>
             <h2

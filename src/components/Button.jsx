@@ -6,7 +6,7 @@ import React from "react";
     ...props
 }) =>{
     return (
-        <button className={`px-4 py-2 rounded-lg bg-[var(--color-primary)] text-white ${className}`} {...props}>
+        <button className={`px-4 py-2 rounded-lg bg-[var(--color-primary)] cursor-pointer font-secondary ${className}`} {...props}>
             {children}
         </button>
     );
