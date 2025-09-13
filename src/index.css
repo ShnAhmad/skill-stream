@@ -12,6 +12,7 @@
 
 body {
   background-color: var(--color-secondary-50);
+  color: var(--color-primary-50);
 }
 
 [data-theme="racing-red"] {
