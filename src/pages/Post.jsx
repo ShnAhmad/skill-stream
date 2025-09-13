@@ -18,7 +18,6 @@ export default function Post() {
   useEffect(() => {
     if (slug) {
       postService.getPost(slug).then((post) => {
-        console.log("post",post)
         if (post) setPost(post);
         else navigate("/");
       });
