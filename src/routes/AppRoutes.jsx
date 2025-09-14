@@ -7,7 +7,7 @@ import AllPosts from "../pages/AllPosts";
 import AddPost from "../pages/AddPost";
 import EditPost from "../pages/EditPost";
 import Post from "../pages/Post";
-import AuthLayout from "../components/AuthLayout";
+import Protected from "../components/Protected";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -20,44 +20,44 @@ export const router = createBrowserRouter([
         {
             path: "/login",
             element: (
-                <AuthLayout authentication={false}>
+                <Protected authentication={false}>
                     <Login />
-                </AuthLayout>
+                </Protected>
             ),
         },
         {
             path: "/signup",
             element: (
-                <AuthLayout authentication={false}>
+                <Protected authentication={false}>
                     <SignupPage />
-                </AuthLayout>
+                </Protected>
             ),
         },
         {
             path: "/all-posts",
             element: (
-                <AuthLayout authentication>
+                <Protected authentication>
                     {" "}
                     <AllPosts />
-                </AuthLayout>
+                </Protected>
             ),
         },
         {
             path: "/add-post",
             element: (
-                <AuthLayout authentication>
+                <Protected authentication>
                     {" "}
                     <AddPost />
-                </AuthLayout>
+                </Protected>
             ),
         },
         {
             path: "/edit-post/:slug",
             element: (
-                <AuthLayout authentication>
+                <Protected authentication>
                     {" "}
                     <EditPost />
-                </AuthLayout>
+                </Protected>
             ),
         },
         {

@@ -66,7 +66,7 @@ const Header = () => {
             {authStatus && (
               <li>
                 <Link
-                  to="/login"
+                  to="#"
                   onClick={logoutHandler}
                   className="px-6 py-2 transition-all ease-in-out duration-300 hover:text-[var(--color-primary-500)] font-secondary bg-[var(--color-secondary-950)]"
                 >
