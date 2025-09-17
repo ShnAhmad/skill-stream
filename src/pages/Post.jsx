@@ -27,7 +27,7 @@ export default function Post() {
   const deletePost = () => {
     postService.deletePost(post.$id).then((status) => {
       if (status) {
-        postService.deleteFile(post.featuredImage);
+        storageService.deleteFile(post.featuredImage);
         navigate("/");
       }
     });
