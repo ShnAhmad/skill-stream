@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import storageService from "../appwrite/storage";
 import postService from "../appwrite/post";
 import PostSkeleton from "../components/postSkeleton"; // <-- import
+import { successAlert } from "../utils";
 
 export default function Post() {
   const [post, setPost] = useState(null);
@@ -29,6 +30,7 @@ export default function Post() {
     postService.deletePost(post.$id).then((status) => {
       if (status) {
         storageService.deleteFile(post.featuredImage);
+        successAlert("Post deleted successfully");
         navigate("/");
       }
     });
