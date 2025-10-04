@@ -9,6 +9,7 @@ import Input from "../Input";
 import RTE from "../RTE";
 import Select from "../Select";
 import { nanoid } from "nanoid";
+import { errorAlert, successAlert } from "../../utils";
 
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues, formState: { errors } } = useForm({
@@ -24,36 +25,58 @@ export default function PostForm({ post }) {
     const user = useSelector((state) => state.auth.user);
 
     const submit = async (data) => {
+      try {
         if (post) {
-            const file = data.image?.[0] ? await storageService.uploadFile(data.image[0]) : null;
+          // UPDATE POST
+          const file = data.image?.[0]
+            ? await storageService.uploadFile(data.image[0])
+            : null;
 
-            if (file) {
-                storageService.deleteFile(post.featuredImage);
-            }
+          if (file) {
+            await storageService.deleteFile(post.featuredImage);
+          }
 
-            const dbPost = await postService.updatePost(post.$id, {
-                ...data,
-                featuredImage: file ? file.$id : undefined,
-            });
+          const dbPost = await postService.updatePost(post.$id, {
+            ...data,
+            featuredImage: file ? file.$id : undefined,
+          });
 
-            if (dbPost) {
-                navigate(`/post/${dbPost.$id}`);
-            }
+          if (dbPost) {
+            successAlert("Post updated successfully");
+            navigate(`/post/${dbPost.$id}`);
+          } else {
+            errorAlert("Failed to update post. Please try again.");
+          }
         } else {
-            if (!data.image?.[0]) {
-                return; // extra safeguard
-            }
-            const file = await storageService.uploadFile(data.image[0]);
+          // CREATE POST
+          if (!data.image?.[0]) {
+            return errorAlert("Please select an image before submitting.");
+          }
 
-            if (file) {
-                data.featuredImage = file.$id;
-                const dbPost = await postService.createPost({ ...data, userId: user.$id, userName: user.name });
+          const file = await storageService.uploadFile(data.image[0]);
 
-                if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`);
-                }
-            }
+          if (!file) {
+            return errorAlert("Image upload failed. Try again.");
+          }
+
+          data.featuredImage = file.$id;
+          const dbPost = await postService.createPost({
+            ...data,
+            userId: user.$id,
+            userName: user.name,
+          });
+
+          if (dbPost) {
+            successAlert("Post created successfully");
+            navigate(`/post/${dbPost.$id}`);
+          } else {
+            errorAlert("Failed to create post. Please try again.");
+          }
         }
+      } catch (err) {
+        console.error("Error in submit:", err);
+        errorAlert("Something went wrong. Please try again later.");
+      }
     };
     const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
