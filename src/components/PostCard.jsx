@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const PostCard = ({ $id, title, featuredImage, userName, $createdAt }) => {
   let imageUrl = storageService.getFileView(featuredImage);
+  const shortTitle = title.length > 50 ? title.substring(0, 50).trim() + "..." : title;
 
   return (
     <Link to={`/post/${$id}`}>
@@ -15,7 +16,7 @@ const PostCard = ({ $id, title, featuredImage, userName, $createdAt }) => {
             className="w-full h-full rounded-xl object-cover"
           />
         </div>
-         <h4 className="text-lg font-semibold font-secondary">{title}</h4>
+         <h4 className="text-lg font-semibold font-secondary">{shortTitle}</h4>
         <div className="flex items-center gap-3 mt-3 font-secondary text-sm">
           <div className="flex items-center gap-2">
             <img
