@@ -11,7 +11,7 @@ import Select from "../Select";
 import { nanoid } from "nanoid";
 
 export default function PostForm({ post }) {
-    const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
+    const { register, handleSubmit, watch, setValue, control, getValues, formState: { errors } } = useForm({
         defaultValues: {
             title: post?.title || "",
             slug: post?.$id || "",
@@ -25,7 +25,7 @@ export default function PostForm({ post }) {
 
     const submit = async (data) => {
         if (post) {
-            const file = data.image[0] ? await storageService.uploadFile(data.image[0]) : null;
+            const file = data.image?.[0] ? await storageService.uploadFile(data.image[0]) : null;
 
             if (file) {
                 storageService.deleteFile(post.featuredImage);
@@ -40,11 +40,13 @@ export default function PostForm({ post }) {
                 navigate(`/post/${dbPost.$id}`);
             }
         } else {
+            if (!data.image?.[0]) {
+                return; // extra safeguard
+            }
             const file = await storageService.uploadFile(data.image[0]);
 
             if (file) {
-                const fileId = file.$id;
-                data.featuredImage = fileId;
+                data.featuredImage = file.$id;
                 const dbPost = await postService.createPost({ ...data, userId: user.$id, userName: user.name });
 
                 if (dbPost) {
@@ -55,16 +57,16 @@ export default function PostForm({ post }) {
     };
 
     const slugTransform = useCallback((value) => {
-      if (value && typeof value === "string") {
-        const baseSlug = value
-          .trim()
-          .toLowerCase()
-          .replace(/[^a-zA-Z\d\s]+/g, "-")
-          .replace(/\s/g, "-");
-        const uniqueSuffix = nanoid(6);
-        return `${baseSlug}-${uniqueSuffix}`;
-      }
-      return "";
+        if (value && typeof value === "string") {
+            const baseSlug = value
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-zA-Z\d\s]+/g, "-")
+                .replace(/\s/g, "-");
+            const uniqueSuffix = nanoid(6);
+            return `${baseSlug}-${uniqueSuffix}`;
+        }
+        return "";
     }, []);
 
     useEffect(() => {
@@ -80,31 +82,39 @@ export default function PostForm({ post }) {
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
+                {/* Title */}
                 <Input
                     label="Title :"
                     placeholder="Title"
-                    className="mb-4"
-                    {...register("title", { required: true })}
+                    className="mb-1"
+                    {...register("title", { required: "Title is required" })}
                 />
+                {errors.title && <p className="text-red-500 text-sm mb-3">{errors.title.message}</p>}
+
                 <Input
                     label="Slug :"
                     placeholder="Slug"
-                    className="mb-4"
-                    {...register("slug", { required: true })}
+                    className="mb-1"
+                    readOnly
+                    {...register("slug", { required: "Slug is required" })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
+                {errors.content && <p className="text-red-500 text-sm mb-3">Content is required</p>}
             </div>
+
             <div className="w-1/3 px-2">
                 <Input
                     label="Featured Image :"
                     type="file"
-                    className="mb-4"
+                    className="mb-1"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
+                    {...register("image", { required: !post ? "Image is required" : false })}
                 />
+                {errors.image && <p className="text-red-500 text-sm mb-3">{errors.image.message}</p>}
+
                 {post && (
                     <div className="w-full mb-4">
                         <img
@@ -114,12 +124,17 @@ export default function PostForm({ post }) {
                         />
                     </div>
                 )}
+
+                {/* Status */}
                 <Select
                     options={["active", "inactive"]}
                     label="Status"
-                    className="mb-4"
-                    {...register("status", { required: true })}
+                    className="mb-1"
+                    {...register("status", { required: "Status is required" })}
                 />
+                {errors.status && <p className="text-red-500 text-sm mb-3">{errors.status.message}</p>}
+
+                {/* Submit */}
                 <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
                     {post ? "Update" : "Submit"}
                 </Button>
