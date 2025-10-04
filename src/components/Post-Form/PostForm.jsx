@@ -8,6 +8,7 @@ import Button from "../Button";
 import Input from "../Input";
 import RTE from "../RTE";
 import Select from "../Select";
+import { nanoid } from "nanoid";
 
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
@@ -54,14 +55,16 @@ export default function PostForm({ post }) {
     };
 
     const slugTransform = useCallback((value) => {
-        if (value && typeof value === "string")
-            return value
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-zA-Z\d\s]+/g, "-")
-                .replace(/\s/g, "-");
-
-        return "";
+      if (value && typeof value === "string") {
+        const baseSlug = value
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-zA-Z\d\s]+/g, "-")
+          .replace(/\s/g, "-");
+        const uniqueSuffix = nanoid(6);
+        return `${baseSlug}-${uniqueSuffix}`;
+      }
+      return "";
     }, []);
 
     useEffect(() => {
