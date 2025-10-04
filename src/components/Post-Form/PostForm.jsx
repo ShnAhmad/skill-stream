@@ -55,18 +55,21 @@ export default function PostForm({ post }) {
             }
         }
     };
-
     const slugTransform = useCallback((value) => {
-        if (value && typeof value === "string") {
-            const baseSlug = value
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-zA-Z\d\s]+/g, "-")
-                .replace(/\s/g, "-");
-            const uniqueSuffix = nanoid(6);
-            return `${baseSlug}-${uniqueSuffix}`;
-        }
-        return "";
+    if (value && typeof value === "string") {
+        const baseSlug = value
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+        const uniqueSuffix = nanoid(3);
+        const trimmedBase = baseSlug.slice(0, 36 - (uniqueSuffix.length + 1));
+        const finalSlug = `${trimmedBase}-${uniqueSuffix}`;
+
+        return finalSlug;
+    }
+    return "";
     }, []);
 
     useEffect(() => {
