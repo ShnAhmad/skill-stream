@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Button from "../components/Button";
 import storageService from "../appwrite/storage";
 import postService from "../appwrite/post";
+import PostSkeleton from "../components/postSkeleton"; // <-- import
 
 export default function Post() {
   const [post, setPost] = useState(null);
@@ -33,7 +34,11 @@ export default function Post() {
     });
   };
 
-  return post ? (
+  if (!post) {
+    return <PostSkeleton />; // show skeleton while loading
+  }
+
+  return (
     <div className="w-full h-full">
       <div className="container mx-auto max-w-[1276px] px-4 md:px-6 py-12 md:py-16 lg:py-24">
         <div className="flex flex-col w-full gap-5">
@@ -43,16 +48,17 @@ export default function Post() {
               <img
                 src="/images/user.png"
                 className="w-6 h-6 rounded-full object-cover"
+                alt="User"
               />
               <span className="font-secondary text-base">{post.userName}</span>
             </div>
             <p>{new Date(post.$createdAt).toLocaleString()}</p>
           </div>
-          <div className="h-96 w-full">
+          <div className="w-full max-h-96 overflow-hidden flex justify-start">
             <img
               src={storageService.getFileView(post.featuredImage)}
               alt={post.title}
-              className="w-full h-full object-cover rounded-xl"
+              className="max-h-96 w-auto object-contain rounded-xl"
             />
           </div>
           {isAuthor && (
@@ -68,5 +74,5 @@ export default function Post() {
         <div className="browser-css">{parse(post.content)}</div>
       </div>
     </div>
-  ) : null;
+  );
 }
