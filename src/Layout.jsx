@@ -5,9 +5,9 @@ import Footer from "./components/Footer/Footer";
 
 const Layout = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col bg-neutral-900">
       <Header />
-      <main className="relative bg-neutral-900">
+      <main className="flex-grow relative">
         <div
           className="absolute inset-0 bg-center bg-repeat opacity-80 mix-blend-multiply"
           style={{ backgroundImage: "url('/images/BackgroundPattern.png')" }}
