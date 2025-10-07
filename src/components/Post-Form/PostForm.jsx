@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -23,6 +23,12 @@ export default function PostForm({ post }) {
 
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
+    const [rteLoaded, setRteLoaded] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setRteLoaded(true), 500); // adjust time as needed
+        return () => clearTimeout(timer);
+    }, []);
 
     const submit = async (data) => {
       try {
@@ -106,65 +112,92 @@ export default function PostForm({ post }) {
     }, [watch, slugTransform, setValue]);
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-            <div className="w-2/3 px-2">
-                {/* Title */}
-                <Input
-                    label="Title :"
-                    placeholder="Title"
-                    className="mb-1"
-                    {...register("title", { required: "Title is required" })}
-                />
-                {errors.title && <p className="text-red-500 text-sm mb-3">{errors.title.message}</p>}
-
-                <Input
-                    label="Slug :"
-                    placeholder="Slug"
-                    className="mb-1"
-                    readOnly
-                    {...register("slug", { required: "Slug is required" })}
-                    onInput={(e) => {
-                        setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
-                    }}
-                />
-                <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
-                {errors.content && <p className="text-red-500 text-sm mb-3">Content is required</p>}
+      <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
+        <div className="w-2/3 px-2">
+          {/* Title */}
+          <Input
+            label="Title :"
+            placeholder="Title"
+            className="mb-1"
+            {...register("title", { required: "Title is required" })}
+          />
+          {errors.title && (
+            <p className="text-red-500 text-sm mb-3">{errors.title.message}</p>
+          )}
+          <Input
+            label="Slug :"
+            placeholder="Slug"
+            className="mb-1"
+            readOnly
+            {...register("slug", { required: "Slug is required" })}
+            onInput={(e) => {
+              setValue("slug", slugTransform(e.currentTarget.value), {
+                shouldValidate: true,
+              });
+            }}
+          />
+          {!rteLoaded ? (
+            <div className="flex items-center justify-center h-40">
+              <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></span>
+              <span className="ml-3">Loading editor...</span>
             </div>
+          ) : (
+            <RTE
+              label="Content :"
+              name="content"
+              control={control}
+              defaultValue={getValues("content")}
+            />
+          )}{" "}
+          {errors.content && (
+            <p className="text-red-500 text-sm mb-3">Content is required</p>
+          )}
+        </div>
 
-            <div className="w-1/3 px-2">
-                <Input
-                    label="Featured Image :"
-                    type="file"
-                    className="mb-1"
-                    accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post ? "Image is required" : false })}
-                />
-                {errors.image && <p className="text-red-500 text-sm mb-3">{errors.image.message}</p>}
+        <div className="w-1/3 px-2">
+          <Input
+            label="Featured Image :"
+            type="file"
+            className="mb-1"
+            accept="image/png, image/jpg, image/jpeg, image/gif"
+            {...register("image", {
+              required: !post ? "Image is required" : false,
+            })}
+          />
+          {errors.image && (
+            <p className="text-red-500 text-sm mb-3">{errors.image.message}</p>
+          )}
 
-                {post && (
-                    <div className="w-full mb-4">
-                        <img
-                            src={storageService.getFileView(post.featuredImage)}
-                            alt={post.title}
-                            className="rounded-lg"
-                        />
-                    </div>
-                )}
-
-                {/* Status */}
-                <Select
-                    options={["active", "inactive"]}
-                    label="Status"
-                    className="mb-1"
-                    {...register("status", { required: "Status is required" })}
-                />
-                {errors.status && <p className="text-red-500 text-sm mb-3">{errors.status.message}</p>}
-
-                {/* Submit */}
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
-                    {post ? "Update" : "Submit"}
-                </Button>
+          {post && (
+            <div className="w-full mb-4">
+              <img
+                src={storageService.getFileView(post.featuredImage)}
+                alt={post.title}
+                className="rounded-lg"
+              />
             </div>
-        </form>
+          )}
+
+          {/* Status */}
+          <Select
+            options={["active", "inactive"]}
+            label="Status"
+            className="mb-1"
+            {...register("status", { required: "Status is required" })}
+          />
+          {errors.status && (
+            <p className="text-red-500 text-sm mb-3">{errors.status.message}</p>
+          )}
+
+          {/* Submit */}
+          <Button
+            type="submit"
+            bgColor={post ? "bg-green-500" : undefined}
+            className="w-full"
+          >
+            {post ? "Update" : "Submit"}
+          </Button>
+        </div>
+      </form>
     );
 }
