@@ -32,7 +32,7 @@ const features = [
 export default function FeaturesSection() {
   return (
     <section className="px-4 md:px-6 py-12 md:py-16 bg-bg text-text">
-      <div className="container mx-auto px-6 text-center">
+      <div className="max-w-3xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[var(--color-primary-500)]">
           Why Skill Stream?
         </h2>
@@ -40,7 +40,7 @@ export default function FeaturesSection() {
           Skill Stream is more than just posts — it’s your journey hub for
           sharing, learning, and connecting through real coding experiences.
         </p>
-
+      </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
           {features.map((item, idx) => (
             <Card
@@ -51,7 +51,6 @@ export default function FeaturesSection() {
           />
           ))}
         </div>
-      </div>
     </section>
   );
 }
