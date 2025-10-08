@@ -1,6 +1,6 @@
 import React from "react";
 
-const AboutCard = ({ icon, title, description }) => {
+const Card = ({ icon, title, description }) => {
   return (
     <div
       className="
@@ -30,4 +30,4 @@ const AboutCard = ({ icon, title, description }) => {
   );
 };
 
-export default AboutCard;
+export default Card;

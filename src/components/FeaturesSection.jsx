@@ -1,5 +1,6 @@
 import React from "react";
 import { Code, PenTool, Users, Globe } from "lucide-react";
+import Card from "./Card";
 
 const features = [
   {
@@ -30,7 +31,7 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section className="text-[var(--color-secondary-100)] px-4 md:px-6 py-12 md:py-16">
+    <section className="px-4 md:px-6 py-12 md:py-16 bg-bg text-text">
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[var(--color-primary-500)]">
           Why Skill Stream?
@@ -40,30 +41,14 @@ export default function FeaturesSection() {
           sharing, learning, and connecting through real coding experiences.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
           {features.map((item, idx) => (
-            <div
-              key={idx}
-              className="
-                relative 
-                rounded-xl 
-                border border-[var(--color-secondary-700)] 
-                p-6 
-                shadow-md 
-                transition-all duration-300
-                text-[var(--color-secondary-100)]
-                hover:-translate-y-1 hover:shadow-xl
-                bg-gradient-to-b from-[var(--color-primary-600)]/20 hover:to-[var(--color-secondary-900)]
-            "
-            >
-              <div className="flex justify-center mb-4 text-[var(--color-primary-500)]">
-                {item.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-[var(--color-secondary-300)] text-sm">
-                {item.description}
-              </p>
-            </div>
+            <Card
+            key={idx}
+            icon={item.icon}
+            title={item.title}
+            description={item.description}
+          />
           ))}
         </div>
       </div>

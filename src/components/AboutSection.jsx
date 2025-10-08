@@ -1,6 +1,6 @@
 import React from "react";
 import { AboutSectionContent } from "../constants";
-import AboutCard from "./AboutCard";
+import Card from "./Card";
 
 const AboutSection = () => {
   return (
@@ -15,7 +15,7 @@ const AboutSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
         {AboutSectionContent.map((item, index) => (
-          <AboutCard
+          <Card
             key={index}
             icon={item.icon}
             title={item.title}
