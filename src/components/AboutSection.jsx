@@ -4,12 +4,12 @@ import AboutCard from "./AboutCard";
 
 const AboutSection = () => {
   return (
-    <section className="px-4 md:px-6 py-12 md:py-16 lg:py-24 bg-bg text-text">
+    <section className="px-4 md:px-6 py-12 md:py-16 bg-bg text-text">
       <div className="max-w-3xl mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-2 text-primary">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[var(--color-primary-500)]">
           How Skill Stream Works
         </h2>
-        <p className="text-lg mb-8 text-secondary">
+        <p className="text-[var(--color-secondary-300)] mb-12 max-w-2xl mx-auto">
           Document, Share, and Learn from real coding journeys.
         </p>
       </div>
@@ -17,6 +17,7 @@ const AboutSection = () => {
         {AboutSectionContent.map((item, index) => (
           <AboutCard
             key={index}
+            icon={item.icon}
             title={item.title}
             description={item.description}
           />
