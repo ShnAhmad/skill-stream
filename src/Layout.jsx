@@ -5,13 +5,9 @@ import Footer from "./components/Footer/Footer";
 
 const Layout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-900">
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-grow relative">
-        <div
-          className="absolute inset-0 bg-center bg-repeat opacity-80 mix-blend-multiply"
-          style={{ backgroundImage: "url('/images/BackgroundPattern.png')" }}
-        />
+      <main className="flex-grow relative bg-gradient-to-b from-[var(--color-secondary-950)] via-[var(--color-secondary-900)] to-[var(--color-primary-900)] text-white">
         <div className="relative z-10">
           <Outlet />
         </div>
