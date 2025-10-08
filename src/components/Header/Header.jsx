@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "../Logo";
 import authService from "../../appwrite/auth";
 import { logout as authLogout } from "../../store/authSlice";
-import { Menu, X } from "lucide-react"; // ✅ optional icon library (Tailwind-friendly)
+import { Menu, X } from "lucide-react";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const authStatus = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const logoutHandler = () => {
     authService.logout().then(() => {
@@ -26,33 +27,40 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-20 bg-[var(--color-secondary-950)] shadow">
-      <nav className="flex items-center justify-between px-4 py-3 md:px-8">
+    <header className="sticky top-0 z-30 bg-[var(--color-secondary-950)]/95 backdrop-blur-md border-b border-[var(--color-secondary-800)] shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
+      <nav className="flex items-center justify-between px-5 md:px-10 py-3">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <Logo width="70px" />
+          <Logo width="80px" />
         </Link>
 
-        {/* Hamburger button (mobile) */}
+        {/* Hamburger (mobile) */}
         <button
-          className="md:hidden"
+          className="md:hidden text-[var(--color-secondary-100)] hover:text-[var(--color-primary-500)] transition"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex ml-auto space-x-6">
+        <ul className="hidden md:flex items-center ml-auto space-x-8 text-[var(--color-secondary-100)] font-medium">
           {navItems.map(
             (item) =>
               item.display && (
                 <li key={item.name}>
                   <Link
                     to={item.slug}
-                    className="px-2 py-1 hover:text-[var(--color-primary-500)] transition-all duration-200"
+                    className={`relative transition-all duration-300 hover:text-[var(--color-primary-500)] ${
+                      location.pathname === item.slug
+                        ? "text-[var(--color-primary-500)]"
+                        : ""
+                    }`}
                   >
                     {item.name}
+                    {location.pathname === item.slug && (
+                      <span className="absolute bottom-[-6px] left-0 w-full h-[2px] bg-[var(--color-primary-600)] rounded"></span>
+                    )}
                   </Link>
                 </li>
               )
@@ -61,7 +69,7 @@ const Header = () => {
             <li>
               <button
                 onClick={logoutHandler}
-                className="px-2 py-1 hover:text-[var(--color-primary-500)] transition-all duration-200"
+                className="px-3 py-1 rounded-md border border-transparent hover:border-[var(--color-primary-600)] hover:text-[var(--color-primary-500)] transition-all duration-300"
               >
                 Logout
               </button>
@@ -72,8 +80,8 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-[var(--color-secondary-950)] border-t border-neutral-700">
-          <ul className="flex flex-col p-4 space-y-3">
+        <div className="md:hidden bg-[var(--color-secondary-950)] border-t border-[var(--color-secondary-800)] animate-slideDown">
+          <ul className="flex flex-col p-4 space-y-3 text-[var(--color-secondary-100)] font-medium">
             {navItems.map(
               (item) =>
                 item.display && (
@@ -81,7 +89,11 @@ const Header = () => {
                     <Link
                       to={item.slug}
                       onClick={() => setMenuOpen(false)}
-                      className="block py-2 hover:text-[var(--color-primary-500)] transition-all duration-200"
+                      className={`block py-2 px-1 rounded-md transition-all duration-300 hover:text-[var(--color-primary-500)] ${
+                        location.pathname === item.slug
+                          ? "text-[var(--color-primary-500)]"
+                          : ""
+                      }`}
                     >
                       {item.name}
                     </Link>
@@ -95,7 +107,7 @@ const Header = () => {
                     logoutHandler();
                     setMenuOpen(false);
                   }}
-                  className="w-full text-left py-2 hover:text-[var(--color-primary-500)] transition-all duration-200"
+                  className="w-full text-left py-2 px-1 rounded-md hover:text-[var(--color-primary-500)] transition-all duration-300"
                 >
                   Logout
                 </button>
