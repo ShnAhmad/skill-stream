@@ -5,6 +5,9 @@ A platform where developers share and explore real coding journeys.
 
 Skill Stream is a community-driven web app built with React and Appwrite, where developers can log in, post their personal coding journeys, and explore experiences shared by others. It’s designed to help developers document their growth, learn from peers, and connect through authentic learning stories — not just finished projects.
 
+  <h3 align="center"><a href="https://skill-stream-omega.vercel.app/"><strong>« Try the demo here »</strong></a></h3>
+
+
 
 ## ✨ Features
 - 🔐 User Authentication – Secure login and signup using Appwrite authentication.
